@@ -42,8 +42,8 @@ void drawRect() {
 }
 
 bool playerUp = true;
-void movePlayer() {
 
+void movePlayer() {
   if(playerUp) {
     lcd.setCursor(1,0);
     lcd.print(" ");
@@ -61,7 +61,17 @@ void movePlayer() {
 }
 
 char text[] = "Hello!";
+unsigned long delayTime = 500;
+unsigned long currentTime = 0;
+unsigned long lastTime = 0;
+
+int i = 0; //text's index
+String text2 = "";
+int x = 15; //position to print
+
 void loop() {
+  currentTime = millis();
+
   if(digitalRead(11) == LOW) {
     digitalWrite(12, HIGH);
     movePlayer();
@@ -70,12 +80,19 @@ void loop() {
     digitalWrite(12, LOW); 
   }
 
-  //do zmiany bo przesuwa ludzika
-  lcd.setCursor(15, 1); // set the cursor to column 15, line 1
-    for (int i = 0; i < 6; i++)
-    {
-      lcd.scrollDisplayLeft();  //Scrolls the contents of the display one space to the left.
-      lcd.print(text[i]);  // Print a message to the LCD.
-      delay(500);  
+ 
+  if(currentTime - lastTime >= delayTime) {
+    lastTime = currentTime;
+    x -= 1;
+    lcd.setCursor(x,1);
+    if(i < strlen(text)) {
+      text2+=text[i];
+      lcd.print(text2);  // Print a message to the LCD.
+    } else {
+      lcd.print(text2 + " ");
     }
+    
+    
+    i+=1;
+  }
 }
