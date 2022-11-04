@@ -71,7 +71,7 @@ void loop() {
   }
 
   //do zmiany bo przesuwa ludzika
-  lcd.setCursor(15, 2); // set the cursor to column 15, line 1
+  lcd.setCursor(15, 1); // set the cursor to column 15, line 1
     for (int i = 0; i < 6; i++)
     {
       lcd.scrollDisplayLeft();  //Scrolls the contents of the display one space to the left.
