@@ -31,7 +31,7 @@ void setup() {
   lcd.createChar(0, customChar);
   lcd.setCursor(1,0);
   lcd.write((byte)0);
-
+  
 }
 
 void drawRect() {
@@ -60,7 +60,7 @@ void movePlayer() {
     playerUp = !playerUp;
 }
 
-char text[] = "Hello!";
+char text[] = "Boloo";
 unsigned long delayTime = 500;
 unsigned long currentTime = 0;
 unsigned long lastTime = 0;
@@ -76,6 +76,7 @@ void loop() {
     digitalWrite(12, HIGH);
     movePlayer();
     delay(500);  
+
   } else {
     digitalWrite(12, LOW); 
   }
@@ -89,10 +90,13 @@ void loop() {
       text2+=text[i];
       lcd.print(text2);  // Print a message to the LCD.
     } else {
-      lcd.print(text2 + " ");
+      if(x >= 0) {
+        lcd.print(text2 + " ");        
+      } else {
+
+      }
+      
     }
-    
-    
     i+=1;
   }
 }
