@@ -60,7 +60,7 @@ void movePlayer() {
     playerUp = !playerUp;
 }
 
-char text[] = "Boloo";
+char text[] = "dupaa";
 unsigned long delayTime = 500;
 unsigned long currentTime = 0;
 unsigned long lastTime = 0;
@@ -93,7 +93,7 @@ void loop() {
       if(x >= 0) {
         lcd.print(text2 + " ");        
       } else {
-
+        //TODO opcja znikania tekstu
       }
       
     }
