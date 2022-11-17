@@ -8,14 +8,14 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 //znak ludzika
 byte customChar[8] = {
-	0b00000,
-	0b01110,
-	0b01110,
-	0b01110,
-	0b00100,
-	0b00110,
-	0b00100,
-	0b01010
+  0b00000,
+  0b01110,
+  0b01110,
+  0b01110,
+  0b00100,
+  0b00110,
+  0b00100,
+  0b01010
 };
 
 void setup() {
@@ -27,40 +27,40 @@ void setup() {
   lcd.init();
   lcd.backlight();
 
-  lcd.begin(16,2);
+  lcd.begin(16, 2);
   lcd.createChar(0, customChar);
-  lcd.setCursor(1,0);
+  lcd.setCursor(1, 0);
   lcd.write((byte)0);
-  
-}
 
-void drawRect() {
-  while(true) {
-    lcd.setCursor(1,0);
-    lcd.print("Hello world");
-  }
 }
 
 bool playerUp = true;
 
 void movePlayer() {
-  if(playerUp) {
-    lcd.setCursor(1,0);
+  if (playerUp) {
+    lcd.setCursor(1, 0);
     lcd.print(" ");
 
-    lcd.setCursor(1,1);
+    lcd.setCursor(1, 1);
     lcd.write((byte)0);
   } else {
-    lcd.setCursor(1,1);
+    lcd.setCursor(1, 1);
     lcd.print(" ");
 
-    lcd.setCursor(1,0);
+    lcd.setCursor(1, 0);
     lcd.write((byte)0);
   }
-    playerUp = !playerUp;
+  playerUp = !playerUp;
 }
 
-char text[] = "dupaa";
+void drawRect() {
+  while (true) {
+    lcd.setCursor(1, 0);
+    lcd.print("Hello world");
+  }
+}
+
+char text[] = "====";
 unsigned long delayTime = 500;
 unsigned long currentTime = 0;
 unsigned long lastTime = 0;
@@ -72,31 +72,36 @@ int x = 15; //position to print
 void loop() {
   currentTime = millis();
 
-  if(digitalRead(11) == LOW) {
+  if (digitalRead(11) == LOW) {
     digitalWrite(12, HIGH);
     movePlayer();
-    delay(500);  
+    delay(500);
 
   } else {
-    digitalWrite(12, LOW); 
+    digitalWrite(12, LOW);
   }
 
- 
-  if(currentTime - lastTime >= delayTime) {
+
+  if (currentTime - lastTime >= delayTime) {
     lastTime = currentTime;
     x -= 1;
-    lcd.setCursor(x,1);
-    if(i < strlen(text)) {
-      text2+=text[i];
+    lcd.setCursor(x, 1);
+    if (i < strlen(text)) {
+      text2 += text[i];
       lcd.print(text2);  // Print a message to the LCD.
     } else {
-      if(x >= 0) {
-        lcd.print(text2 + " ");        
+      if (x >= 0) {
+        lcd.print(text2 + " ");
       } else {
+        
+        text2.remove(text2.length()-1);
+        Serial.println(text2);
+        lcd.print(text2 + " ");
+        Serial.println(text2);
         //TODO opcja znikania tekstu
       }
-      
+
     }
-    i+=1;
+    i += 1;
   }
 }
