@@ -34,7 +34,7 @@ void setup() {
 
 }
 
-bool playerUp = true;
+bool playerUp = 1;
 
 void movePlayer() {
   if (playerUp) {
@@ -53,6 +53,8 @@ void movePlayer() {
   playerUp = !playerUp;
 }
 
+
+
 void drawRect() {
   while (true) {
     lcd.setCursor(1, 0);
@@ -60,16 +62,60 @@ void drawRect() {
   }
 }
 
-char text[] = "====";
-unsigned long delayTime = 500;
+char text[] = "=====";
+unsigned long delayTime = 300;
 unsigned long currentTime = 0;
-unsigned long lastTime = 0;
+unsigned long lastTime1 = 0;
+unsigned long lastTime2 = 0;
 
 int i = 0; //text's index
+String text1 = "";
+int x = 13; //position to print
+int y = 13;
+int j = 0;
 String text2 = "";
-int x = 15; //position to print
+int textLen = strlen(text);
+unsigned long firstDelay = 5000;
 
+unsigned long pointDelay = 2000;
+unsigned long lastPoint = 0;
+int points = 0;
+
+bool checkTouch() {
+  if (playerUp && y < 2 && y > -3) {
+    return true;
+  } else if (!playerUp && x < 2 && x > -3) {
+    return true;
+  }
+  return false;
+}
+bool touched = false;
 void loop() {
+
+  if (checkTouch()) {
+    if (touched == false) {
+      Serial.println("haahaha");
+      touched = true;
+      lcd.setCursor(0, 0);
+      lcd.print("                ");
+      lcd.setCursor(0, 1);
+      lcd.print("                ");
+      delay(1000);
+    }
+    lcd.setCursor(2, 0);
+    lcd.print("Twoj wynik: ");
+    lcd.setCursor(7, 1);
+    lcd.print(points);
+    return;
+  }
+
+  lcd.setCursor(14, 0);
+  lcd.print(points);
+
+  if (currentTime - lastPoint >= pointDelay) {
+    lastPoint = currentTime;
+    points++;
+  }
   currentTime = millis();
 
   if (digitalRead(11) == LOW) {
@@ -80,28 +126,54 @@ void loop() {
   } else {
     digitalWrite(12, LOW);
   }
-
-
-  if (currentTime - lastTime >= delayTime) {
-    lastTime = currentTime;
+  if (currentTime - lastTime1 >= delayTime) {
+    lastTime1 = currentTime;
     x -= 1;
     lcd.setCursor(x, 1);
-    if (i < strlen(text)) {
-      text2 += text[i];
-      lcd.print(text2);  // Print a message to the LCD.
+    if (i < textLen) {
+      text1 += text[i];
+      lcd.print(text1);  // Print a message to the LCD.
     } else {
       if (x >= 0) {
-        lcd.print(text2 + " ");
+        lcd.print(text1 + " ");
       } else {
-        
-        text2.remove(text2.length()-1);
-        Serial.println(text2);
-        lcd.print(text2 + " ");
-        Serial.println(text2);
-        //TODO opcja znikania tekstu
-      }
 
+        text1.remove(text1.length() - 1);
+        Serial.println(text1);
+        lcd.print(text1 + " ");
+        Serial.println(text1);
+      }
     }
     i += 1;
+  }
+  if (currentTime < firstDelay) {
+    return;
+  }
+  if (currentTime - lastTime2 >= delayTime) {
+    lastTime2 = currentTime;
+    y -= 1;
+    lcd.setCursor(y, 0);
+    if (j < textLen) {
+      text2 += text[j];
+      lcd.print(text2);  // Print a message to the LCD.
+    } else {
+      if (y >= 0) {
+        lcd.print(text2 + " ");
+      } else {
+        text2.remove(text2.length() - 1);
+        Serial.println(text2);
+        lcd.print(text2 + " ");
+        Serial.println(text2);
+      }
+    }
+    j += 1;
+  }
+  if (x < textLen - 2 * textLen) {
+    x = 13;
+    i = 0;
+  }
+  if (y < textLen - 2 * textLen) {
+    y = 13;
+    j = 0;
   }
 }
