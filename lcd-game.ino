@@ -1,14 +1,12 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-//TODO - zrobic ladniejszy kod i dodac funckje ponownej gry po wcisniecu przycisku
-
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 //12 - diode pin
 //11 - button pin
 
-//player's character
+//it creates custom character on lcd screen
 byte customChar[8] = {
   0b00000,
   0b01110,
