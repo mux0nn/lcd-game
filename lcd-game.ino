@@ -1,12 +1,14 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
+//TODO - zrobic ladniejszy kod i dodac funckje ponownej gry po wcisniecu przycisku
+
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-//12 - dioda
-//11 - przycisk
+//12 - diode pin
+//11 - button pin
 
-//znak ludzika
+//player's character
 byte customChar[8] = {
   0b00000,
   0b01110,
@@ -53,15 +55,6 @@ void movePlayer() {
   playerUp = !playerUp;
 }
 
-
-
-void drawRect() {
-  while (true) {
-    lcd.setCursor(1, 0);
-    lcd.print("Hello world");
-  }
-}
-
 char text[] = "=====";
 unsigned long delayTime = 300;
 unsigned long currentTime = 0;
@@ -94,16 +87,15 @@ void loop() {
 
   if (checkTouch()) {
     if (touched == false) {
-      Serial.println("haahaha");
       touched = true;
       lcd.setCursor(0, 0);
       lcd.print("                ");
       lcd.setCursor(0, 1);
       lcd.print("                ");
-      delay(1000);
+      delay(500);
     }
     lcd.setCursor(2, 0);
-    lcd.print("Twoj wynik: ");
+    lcd.print("Your score: ");
     lcd.setCursor(7, 1);
     lcd.print(points);
     return;
@@ -132,20 +124,18 @@ void loop() {
     lcd.setCursor(x, 1);
     if (i < textLen) {
       text1 += text[i];
-      lcd.print(text1);  // Print a message to the LCD.
+      lcd.print(text1);
     } else {
       if (x >= 0) {
         lcd.print(text1 + " ");
       } else {
-
         text1.remove(text1.length() - 1);
-        Serial.println(text1);
         lcd.print(text1 + " ");
-        Serial.println(text1);
       }
     }
     i += 1;
   }
+  //it slows down appearance of the first platform
   if (currentTime < firstDelay) {
     return;
   }
@@ -155,19 +145,18 @@ void loop() {
     lcd.setCursor(y, 0);
     if (j < textLen) {
       text2 += text[j];
-      lcd.print(text2);  // Print a message to the LCD.
+      lcd.print(text2);
     } else {
       if (y >= 0) {
         lcd.print(text2 + " ");
       } else {
         text2.remove(text2.length() - 1);
-        Serial.println(text2);
         lcd.print(text2 + " ");
-        Serial.println(text2);
       }
     }
     j += 1;
   }
+  //show another platform
   if (x < textLen - 2 * textLen) {
     x = 13;
     i = 0;
